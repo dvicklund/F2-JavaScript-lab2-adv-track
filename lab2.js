@@ -50,18 +50,63 @@ function assert(expression, failureMessage) {
  with Dowington.
 */
 
-var hoursSpentInDowington; // TODO: assign me the value of the
+function Blob() {
+  this.peopleEaten = 0;
+  this.peoplePerHour = 1;
+  
+
+  this.eatAPerson = function() {
+    this.peopleEaten++;
+    this.peoplePerHour++;
+  };
+
+  this.hoursToOoze = function(population, peoplePerHour) {
+    minutesBetweenMeals = 0;
+    totalMinutes = 0;
+    blob.peopleEaten = 0;
+    blob.peoplePerHour = peoplePerHour;
+    while(population > 0) {
+      minutesBetweenMeals++;
+      timeToMeal = 60 / blob.peoplePerHour;
+      if(minutesBetweenMeals == timeToMeal || minutesBetweenMeals > timeToMeal) {
+        blob.eatAPerson();
+        population--;
+        totalMinutes += minutesBetweenMeals;
+        minutesBetweenMeals = 0;
+      }
+    }
+    return totalMinutes/60;
+  };
+}
+
+var blob = new Blob();
+
+var minutesBetweenMeals = 0;
+var totalMinutes = 0;
+var dowingtonPopulation = 1000;
+
+while(dowingtonPopulation > 0) {
+  minutesBetweenMeals++;
+  var timeToMeal = 60 / blob.peoplePerHour;
+  if(minutesBetweenMeals == timeToMeal || minutesBetweenMeals > timeToMeal) {
+    blob.eatAPerson();
+    dowingtonPopulation--;
+    totalMinutes += minutesBetweenMeals;
+    minutesBetweenMeals = 0;
+  }
+}
+
+
+var hoursSpentInDowington = totalMinutes / 60; // TODO: assign me the value of the
                            // above calculation (how long it took
                            // the blob to eat Dowington)
+
+
 
 // Now, write a method that takes a population for an arbitrary
 // town, and the starting consumption rate, and returns the number
 // of hours the blob needs to ooze its way through that town.
 
-function hoursToOoze(population, peoplePerHour) {
-  // TODO: implement me based on the instructions above.
-  // Be sure to then assign me to the Blob's prototype.
-}
 
 assert(blob.hoursToOoze(0, 1) === 0, 'no people means no time needed.');
 assert(blob.hoursToOoze(1000, 1) === hoursSpentInDowington,
@@ -69,6 +114,11 @@ assert(blob.hoursToOoze(1000, 1) === hoursSpentInDowington,
 
 // TODO: write three more assertions like the two above, testing out
 // the hoursToOoze method.
+
+assert(blob.hoursToOoze(0, 3) === 0, 'no people with 3 per hour - still no time needed');
+assert(blob.hoursToOoze(1, 1) === 1, 'one person at one person per hour - one hour needed');
+assert(blob.hoursToOoze(1500000, 1) > 5, '1.5 million people should take more than 5 hours');
+
 
 //*********************************************************
 // PROBLEM 2: Universal Translator. 20 points
@@ -85,9 +135,11 @@ var hello = {
 // speak, and method (that you'll place on the prototype) called
 // sayHello.
 
-function SentientBeing () {
+function SentientBeing (homeworld, language) {
   // TODO: specify a home planet and a language
   // you'll need to add parameters to this constructor
+  this.homeworld = homeworld;
+  this.language = language;
 }
 
 // sb is a SentientBeing object
@@ -97,12 +149,19 @@ function sayHello (sb) {
     // of the listener (the sb parameter above).
     // use the 'hello' object at the beginning of this exercise
     // to do the translating
-
+  console.log(hello[this.language]);
+  return hello[sb.language];
     //TODO: put this on the SentientBeing prototype
-  }
+}
+
+SentientBeing.prototype.sayHello = sayHello;
 
 // TODO: create three subclasses of SentientBeing, one for each
 // species above (Klingon, Human, Romulan).
+
+function Klingon() {
+  
+}
 
 assert((new Human()).sayHello(new Klingon()) === 'nuqneH',
   'the klingon should hear nuqneH');
