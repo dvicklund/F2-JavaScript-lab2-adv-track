@@ -160,14 +160,36 @@ SentientBeing.prototype.sayHello = sayHello;
 // species above (Klingon, Human, Romulan).
 
 function Klingon() {
-  
+  SentientBeing.call(this, "Qo'noS", "klingon");
 }
+Klingon.prototype = Object.create(SentientBeing.prototype);
+
+function Human() {
+  SentientBeing.call(this, "Earth", "federation standard");
+}
+Human.prototype = Object.create(SentientBeing.prototype);
+
+function Romulan() {
+  SentientBeing.call(this, "Romulus", "romulan");
+}
+Romulan.prototype = Object.create(SentientBeing.prototype);
 
 assert((new Human()).sayHello(new Klingon()) === 'nuqneH',
   'the klingon should hear nuqneH');
 
 // TODO: write five more assertions, to complete all the possible
 // greetings between the three types of sentient beings you created above.
+
+assert((new Human()).sayHello(new Romulan()) === 'Jolan\'tru',
+  'the romulan should hear Jolan\'tru');
+assert((new Klingon()).sayHello(new Human()) === 'hello', 
+  'the human should hear hello');
+assert((new Klingon()).sayHello(new Romulan()) === 'Jolan\'tru', 
+  'the romulan should hear Jolan\'tru');
+assert((new Romulan()).sayHello(new Klingon()) === 'nuqneH', 
+  'the klingon should hear nuqneH');
+assert((new Romulan()).sayHello(new Human()) === 'hello', 
+  'the human should hear hello');
 
 //*********************************************************
 // PROBLEM 3: Sorting. 20 points.
@@ -186,21 +208,36 @@ function lastLetterSort(stringArray) {
     // this byLastLetter function is a "compare function"
     // And check out the "comparing strings" section  here:
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String
+    if(a[a.length-1].toLowerCase() < b[b.length-1].toLowerCase()) {
+      return -1;
+    } else if (a[a.length-1].toLowerCase() == b[b.length-1].toLowerCase()) {
+      return 0;
+    } else return 1;
   }
   stringArray.sort(byLastLetter);
 }
-
+ 
 function sumArray(numberArray) {
   var sum = 0;
   // TODO: implement me using forEach
+  numberArray.forEach(function(element) {
+    sum += element;
+  });
   return sum;
 }
 
 function sumSort(arrayOfArrays) {
-  arrayOfArrays.sort(function(item) {
+  arrayOfArrays.sort(function(a, b) {
     // TODO: implement me using sumArray
     //  order the arrays based on the sum of the numbers
     //  inside each array
+    if(sumArray(a) < sumArray(b)) {
+      return -1;
+    } else if(sumArray(a) == sumArray(b)) {
+      return 0;
+    } else {
+      return 1;
+    }
   });
 }
 
